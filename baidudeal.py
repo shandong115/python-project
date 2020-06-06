@@ -9,6 +9,8 @@ from requests.exceptions import RequestException
 from bs4 import BeautifulSoup
 from lxml import etree
 import time
+import urllib.request
+from urllib.error import HTTPError
 
 def get_baidu_data(url):
 	
@@ -40,20 +42,34 @@ def get_baidu_data(url):
 		return(response.text)
 	
 def get_book(url):
-	headers = {
-		'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-		'Accept-Encoding':'gzip, deflate, br',
-		'Accept-Language':'en-US,en;q=0.5',
-		'Connection':'keep-alive',
-		'DNT':'1',
-		'Host':'pan.baidu.com',
-		'Upgrade-Insecure-Requests':'1',
-		'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0'
-		}
+	#headers = {
+	#	'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+	#	'Accept-Encoding':'gzip, deflate, br',
+	#	'Accept-Language':'zh-CN,zh;q=0.9',
+	#	'Cache-Control':'max-age=0',
+	#	'Connection':'keep-alive',
+	#	'Cookie':'BIDUPSID=a1058bf4dc003808d203c98e1507ba4c; PSTM=1590161023; BAIDUID=a1058bf4dc003808d203c98e1507ba4c:FG=1; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598; BDUSS=GloU09uQ1dnOWt3ak1ZZlc4MHZXeU9Cb0dGU2E0Zm1vLWtKdzA1dWdRU2I1QUJmSVFBQUFBJCQAAAAAAAAAAAEAAACYI7UPycC2rDExNQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJtX2V6bV9led; PANWEB=1; STOKEN=151a77864dbc018403d047d3c1cca2dc008164375d2fcf528ee61592d225050a; SCRC=044b165dc988c55c1c0e3dcae4eeeddd; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; delPer=0; PSINO=1; jshunter-uuid=4a998b5a-55c7-459e-abc2-532d9b46aaa6; csrfToken=ZV3tb9G1NSWpxjPiq7tb_qLI; H_PS_PSSID=31727_1431_31326_21079_31606_31779_31673_31322_30824_31846',
+	#	'Host':'pan.baidu.com',
+	#	'Sec-Fetch-Dest':'document',
+	#	'Sec-Fetch-Mode':'navigate',
+	#	'Sec-Fetch-Site':'none',
+	#	'Sec-Fetch-User':'?1',
+	#	'Upgrade-Insecure-Requests':'1',
+	#	'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'
+	#}
+	
+	
+	headers = {'Cookie': 'BIDUPSID=a1058bf4dc003808d203c98e1507ba4c; PSTM=1590161023; BAIDUID=a1058bf4dc003808d203c98e1507ba4c:FG=1; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598; BDUSS=GloU09uQ1dnOWt3ak1ZZlc4MHZXeU9Cb0dGU2E0Zm1vLWtKdzA1dWdRU2I1QUJmSVFBQUFBJCQAAAAAAAAAAAEAAACYI7UPycC2rDExNQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJtX2V6bV9led; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; delPer=0; PSINO=1; jshunter-uuid=4a998b5a-55c7-459e-abc2-532d9b46aaa6'}
+	
 	try:
-		response = requests.get(url, headers=headers,timeout=30)
+		response = requests.get(url, headers=headers)
+		#response = requests('GET',  url, headers=headers)
+		#print(response.text)
+		#reditList = response.history
+		#print(response.history)
 		if not response.status_code == 200:
-			print('Request Not Successfully: '+url + ',======>status_code:'+str(response.status_code))
+			print('Request Not Successfully: ['+url + '],======>status_code:'+str(response.status_code))
+			print(headers)
 			return None
 		print('Request Successfully: ' + url)
 	except RequestException as e:
@@ -67,10 +83,37 @@ def get_book(url):
 		data1 = data.decode('utf-8')
 		return(data1)
 	else:
-		return(response.text)
+		#return(response.text)
+		return(response.content)
 		
-if __name__ == '__main__':
-	#url='https://pan.baidu.com/rest/2.0/xpan/multimedia?method=filemetas&access_token=121.91e183f3348a40588e9e85048079c998.YsJGWFef1mAN7VY10Au-496XoG3YJepFeAaTYFL.Xj0Ngg&&fsids=[881468097891744,404815862929782]&dlink=1'
-	url='https://d.pcs.baidu.com/file/6869b32c7oc5f700291f1aba2e48a59f?fid=587978346-250528-16517637562495\u0026rt=pr\u0026sign=FDtAERV-DCb740ccc5511e5e8fedcff06b081203-mQTWPv%2Fx0PxFu1OSXKQULNwYG0c%3D\u0026expires=8h\u0026chkbd=0\u0026chkv=2\u0026dp-logid=825729390285808726\u0026dp-callid=0\u0026dstime=1591293640\u0026r=569257331'
-	data=get_book(url)
-	print(data)
+def get_book2(url):
+	headers = {'Cookie': 'BIDUPSID=a1058bf4dc003808d203c98e1507ba4c; PSTM=1590161023; BAIDUID=a1058bf4dc003808d203c98e1507ba4c:FG=1; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598; BDUSS=GloU09uQ1dnOWt3ak1ZZlc4MHZXeU9Cb0dGU2E0Zm1vLWtKdzA1dWdRU2I1QUJmSVFBQUFBJCQAAAAAAAAAAAEAAACYI7UPycC2rDExNQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJtX2V6bV9led; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; delPer=0; PSINO=1; jshunter-uuid=4a998b5a-55c7-459e-abc2-532d9b46aaa6;'} 
+	try:
+		request=urllib.request.Request(url,headers=headers)
+		rsp = urllib.request.urlopen(request)
+		if(rsp.status == 200):
+			print("get success. reading....")
+			return rsp.read()
+		else:
+			print("fail...code="+str(rsp.status))
+			return None
+	except HTTPError as e:
+		print('Request Exception!'+url)
+		traceback.print_exc()
+		return None
+	
+	
+		
+#if __name__ == '__main__':
+	#url="https://d.pcs.baidu.com/file/4b564b91bv8ca50122946c324f5779c9?fid=587978346-250528-19210837918619&rt=pr&sign=FDtAERV-DCb740ccc5511e5e8fedcff06b081203-VrDi%2FB%2Fd6EjC1hwUjqQi%2B45rtDA%3D&expires=8h&chkbd=0&chkv=2&dp-logid=4108434491219458472&dp-callid=0&dstime=1591369415&r=805497289"
+	#url="https://pan.baidu.com/rest/2.0/xpan/multimedia?method=filemetas&access_token=121.91e183f3348a40588e9e85048079c998.YsJGWFef1mAN7VY10Au-496XoG3YJepFeAaTYFL.Xj0Ngg&dlink=1&fsids=%5B451941592623457,207948535100295%5D"
+	
+	#url="https%3A%2F%2Fpan.baidu.com%2Frest%2F2.0%2Fxpan%2Fmultimedia%3Fmethod%3Dfilemetas%26access_token%3D121.91e183f3348a40588e9e85048079c998.YsJGWFef1mAN7VY10Au-496XoG3YJepFeAaTYFL.Xj0Ngg%26dlink%3D1%26fsids%3D%5B451941592623457%2C207948535100295%5D"
+	#data=get_book(url)
+	#if(data is not None):
+	#	with open('e.txt','w') as f:
+	#		f.write(data)
+	#else:		
+	#	print('wrong...')
+		
+	

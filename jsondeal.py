@@ -1,5 +1,8 @@
 import json
 import os
+from baidudeal import get_book2
+import time
+import traceback
 
 def get_fsids():
 	path = "E:\\documents\\book\\"
@@ -23,7 +26,35 @@ def get_fsids():
 						fsids.clear()
 						print('have dealed:'+str(i))
 
-
+def deal_json_file_and_get_book():
+	path = "E:\\documents\\book\\dlink\\4\\"
+	files = os.listdir(path)
+	wrongs=[]
+	#values=[]
+	i = 0
+	print(files)
+	for file in files:
+		with open(path+file,mode='r',encoding='utf-8') as f:
+			json_str = json.load(f)
+			ll = json_str['list']
+		
+			for l in ll:
+				dlink = l['dlink']
+				fileName=l['filename']
+				
+				data = get_book2(dlink)
+				if(data is not None):
+					with open('book\\'+fileName,'wb') as ff:
+						ff.write(data)
+					print(fileName+' is ok!\n')
+				else:
+					print('fail...'+str(l)+'\n')
+					wrongs.append(l)
+				time.sleep(3)
+		print(file+' have dealed over!\n')
+	with open('wrong.txt', mode='w',encoding='utf-8') as f_wrong:
+		f_wrong.write(str(wrongs))
+		
 def get_dlink():
 	url = 'https://pan.baidu.com/rest/2.0/xpan/multimedia?method=filemetas&access_token=121.91e183f3348a40588e9e85048079c998.YsJGWFef1mAN7VY10Au-496XoG3YJepFeAaTYFL.Xj0Ngg&dlink=1&fsids='
 	
@@ -36,5 +67,39 @@ def get_dlink():
 			ff.write(url+line)
 	ff.close()
 	
+
+def rename_files():
+	#path = "E:\\documents\\book\\dlink\\4\\"
+	path = "E:\\workplace\\python-project\\book\\"
+	files = os.listdir(path)
+	print('file numbers:'+str(len(files))+'\n')
+	s1 = 'obook.cc-'
+	s2 = 'SoBooKs.cc - '
+	s3 = 'obook.cc - '
+	s4 = 'obook.cc'
+	newName=''
+	with open('1.txt','a',encoding='utf-8') as f:
+		for file in files:
+			newName=''
+			if(file.startswith(s1)):
+				newName = file[len(s1):]
+			elif(file.startswith(s2)):
+				newName = file[len(s2):]
+			elif(file.startswith(s3)):
+				newName = file[len(s3):]
+			elif(file.startswith(s4)):
+				newName = file[len(s4):]
+				
+			if(len(newName)>0):
+				try:
+					os.rename(path+file, path+newName)
+					f.write('oldname:'+file+'--->newName:'+newName+'\n')
+				except FileExistsError as e:
+					print('FileExistsError Exception!'+file)
+					traceback.print_exc()
+		
+	
+	
 if __name__ == '__main__':
-	get_dlink()
+	#deal_json_file_and_get_book()
+	rename_files()
