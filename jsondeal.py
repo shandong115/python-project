@@ -3,6 +3,8 @@ import os
 from baidudeal import get_book2
 import time
 import traceback
+import requests
+import random
 
 def get_fsids():
 	path = "E:\\documents\\book\\"
@@ -98,8 +100,19 @@ def rename_files():
 					print('FileExistsError Exception!'+file)
 					traceback.print_exc()
 		
-	
+def send_file_name():
+	path = "E:\\workplace\\python\\python-project\\book\\"
+	#path = "D:\\download\\chrome\\"
+	files = os.listdir(path)
+	random.shuffle(files)
+	for file in files:
+		if(os.path.isfile(path+file) and file.endswith('.epub')):
+			index=file.find('.epub')
+			r=requests.get('http://127.0.0.1:8888',params={'fullname':path+file,'filename':file[:index]})
+			print('send file:'+file+' ,status:'+str(r.status_code))
+			time.sleep(1)
 	
 if __name__ == '__main__':
 	#deal_json_file_and_get_book()
-	rename_files()
+	#rename_files()
+	send_file_name()
