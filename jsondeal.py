@@ -27,7 +27,38 @@ def get_fsids():
 						f_out.write('\n')
 						fsids.clear()
 						print('have dealed:'+str(i))
+def get_fsids_ex():
+	path = "E:\\documents\\book\\json-file\\"
+	files = os.listdir(path)
+	fsids=[]
+	i = 0
+	print(files)
+	with open('out.txt', mode='w',encoding='utf-8') as f_out:
+		for file in files:
+			with open(path+file,mode='r',encoding='utf-8') as f:
+				json_str = json.load(f)
+				ll = json_str['list']
+			
+				for l in ll:
+					fs_id = l['fs_id']
+					size = l['size']
+					#print('size: ' + str(size))
+					if(size>1024*1024*10):
+						#print('too big')
+						continue
+					
+					fsids.append(fs_id)
+					i=i+1
+					if(i % 100 == 0):
+						f_out.write(str(fsids))
+						f_out.write('\n')
+						fsids.clear()
+						print('have dealed:'+str(i))
+		f_out.write(str(fsids))
+		f_out.write('\n')
+		fsids.clear()
 
+						
 def deal_json_file_and_get_book():
 	path = "E:\\documents\\book\\dlink\\4\\"
 	files = os.listdir(path)
@@ -113,6 +144,8 @@ def send_file_name():
 			time.sleep(1)
 	
 if __name__ == '__main__':
+	get_dlink()
+	#get_fsids_ex()
 	#deal_json_file_and_get_book()
 	#rename_files()
-	send_file_name()
+	#send_file_name()
