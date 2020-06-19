@@ -7,7 +7,8 @@ import requests
 import random
 
 def get_fsids():
-	path = "E:\\documents\\book\\"
+	#path = "E:\\documents\\book\\"
+	path = "F:\\download\\baidunetdisk\\1\\"
 	files = os.listdir(path)
 	fsids=[]
 	i = 0
@@ -27,6 +28,12 @@ def get_fsids():
 						f_out.write('\n')
 						fsids.clear()
 						print('have dealed:'+str(i))
+		if(len(fsids) > 0):
+			f_out.write(str(fsids))
+			f_out.write('\n')
+			fsids.clear()
+			print('have dealed:'+str(i))
+
 def get_fsids_ex():
 	path = "E:\\documents\\book\\json-file\\"
 	files = os.listdir(path)
@@ -54,13 +61,16 @@ def get_fsids_ex():
 						f_out.write('\n')
 						fsids.clear()
 						print('have dealed:'+str(i))
-		f_out.write(str(fsids))
-		f_out.write('\n')
-		fsids.clear()
 
+		if(len(fsids) > 0):
+			f_out.write(str(fsids))
+			f_out.write('\n')
+			fsids.clear()
+			print('have dealed:'+str(i))
 						
 def deal_json_file_and_get_book():
-	path = "E:\\documents\\book\\dlink\\4\\"
+	#path = "E:\\documents\\book\\dlink\\4\\"
+	path = "F:\\download\\baidunetdisk\\1\\"
 	files = os.listdir(path)
 	wrongs=[]
 	#values=[]
@@ -83,7 +93,7 @@ def deal_json_file_and_get_book():
 				else:
 					print('fail...'+str(l)+'\n')
 					wrongs.append(l)
-				time.sleep(3)
+				time.sleep(2)
 		print(file+' have dealed over!\n')
 	with open('wrong.txt', mode='w',encoding='utf-8') as f_wrong:
 		f_wrong.write(str(wrongs))
@@ -103,7 +113,8 @@ def get_dlink():
 
 def rename_files():
 	#path = "E:\\documents\\book\\dlink\\4\\"
-	path = "E:\\workplace\\python-project\\book\\"
+	#path = "E:\\workplace\\python-project\\book\\"
+	path = "G:\\workspace\\python\\python-project\\book\\"
 	files = os.listdir(path)
 	print('file numbers:'+str(len(files))+'\n')
 	s1 = 'obook.cc-'
@@ -132,7 +143,8 @@ def rename_files():
 					traceback.print_exc()
 		
 def send_file_name():
-	path = "E:\\workplace\\python\\python-project\\book\\"
+	path = "G:\\workspace\\python\\python-project\\book\\"
+	#path = "E:\\workplace\\python\\python-project\\book\\"
 	#path = "D:\\download\\chrome\\"
 	files = os.listdir(path)
 	random.shuffle(files)
@@ -144,8 +156,13 @@ def send_file_name():
 			time.sleep(1)
 	
 if __name__ == '__main__':
+<<<<<<< HEAD
 	get_dlink()
 	#get_fsids_ex()
 	#deal_json_file_and_get_book()
+=======
+	deal_json_file_and_get_book()
+	#get_fsids()
+>>>>>>> 059b25cc96e7ac42852a2030922198be575f77d3
 	#rename_files()
 	#send_file_name()
