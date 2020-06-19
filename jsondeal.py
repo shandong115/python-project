@@ -156,13 +156,9 @@ def send_file_name():
 			time.sleep(1)
 	
 if __name__ == '__main__':
-<<<<<<< HEAD
-	get_dlink()
+	#get_dlink()
 	#get_fsids_ex()
-	#deal_json_file_and_get_book()
-=======
 	deal_json_file_and_get_book()
 	#get_fsids()
->>>>>>> 059b25cc96e7ac42852a2030922198be575f77d3
 	#rename_files()
 	#send_file_name()
