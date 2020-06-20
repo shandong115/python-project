@@ -11,6 +11,7 @@ from lxml import etree
 import time
 import urllib.request
 from urllib.error import HTTPError
+import http
 
 def get_baidu_data(url):
 	
@@ -87,7 +88,8 @@ def get_book(url):
 		return(response.content)
 		
 def get_book2(url):
-	headers = {'Cookie': 'BIDUPSID=a1058bf4dc003808d203c98e1507ba4c; PSTM=1590161023; BAIDUID=a1058bf4dc003808d203c98e1507ba4c:FG=1; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598; BDUSS=GloU09uQ1dnOWt3ak1ZZlc4MHZXeU9Cb0dGU2E0Zm1vLWtKdzA1dWdRU2I1QUJmSVFBQUFBJCQAAAAAAAAAAAEAAACYI7UPycC2rDExNQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJtX2V6bV9led; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; delPer=0; PSINO=1; jshunter-uuid=4a998b5a-55c7-459e-abc2-532d9b46aaa6;'} 
+	headers = {'Cookie': 'BIDUPSID=a1058bf4dc003808d203c98e1507ba4c; PSTM=1590161023; BAIDUID=a1058bf4dc003808d203c98e1507ba4c:FG=1; PANWEB=1; BDUSS=FoWjZMZmZkUHc2R1VxNkhsZktnaEl1Tm1HRDdhbXU5SlJZOXpJeHptWENaQXhmRVFBQUFBJCQAAAAAAAAAAAEAAACYI7UPycC2rDExNQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMLX5F7C1-ReTX; STOKEN=4c2c6c865c7e376e7f2e8ceaba68392e56c745e261d23d0cc611c189c6802d77; SCRC=6791d066dc8b10c20b8d25469a015294; Hm_lvt_7a3960b6f067eb0085b7f96ff5e660b0=1592055750; yjs_js_security_passport=4610ed0149cf26d8d417ebe6f22b6eebe0bc7228_1592499082_js; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598'} 
+	#headers = {'Cookie': 'BIDUPSID=a1058bf4dc003808d203c98e1507ba4c; PSTM=1590161023; BAIDUID=a1058bf4dc003808d203c98e1507ba4c:FG=1; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598; BDUSS=GloU09uQ1dnOWt3ak1ZZlc4MHZXeU9Cb0dGU2E0Zm1vLWtKdzA1dWdRU2I1QUJmSVFBQUFBJCQAAAAAAAAAAAEAAACYI7UPycC2rDExNQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJtX2V6bV9led; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; delPer=0; PSINO=1; jshunter-uuid=4a998b5a-55c7-459e-abc2-532d9b46aaa6;'} 
 	try:
 		request=urllib.request.Request(url,headers=headers)
 		rsp = urllib.request.urlopen(request)
@@ -101,6 +103,27 @@ def get_book2(url):
 		print('Request Exception!'+url)
 		traceback.print_exc()
 		return None
+	except ConnectionResetError as e:
+		print('Request ConnectionResetError!'+url)
+		traceback.print_exc()
+		return None
+	except TimeoutError as e:
+		print('Request TimeoutError!'+url)
+		traceback.print_exc()
+		return None	
+	except OSError as e:
+		print('Request OSError!'+url)
+		traceback.print_exc()
+		return None	
+	except urllib.error.URLError as e:
+		print('Request URLError!'+url)
+		traceback.print_exc()
+		return None	
+	except http.client.IncompleteRead as e:
+		print('Request http.client.IncompleteRead!'+url)
+		traceback.print_exc()
+		return None	
+	
 	
 	
 		

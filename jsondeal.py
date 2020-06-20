@@ -5,6 +5,7 @@ import time
 import traceback
 import requests
 import random
+import sys
 
 def get_fsids():
 	#path = "E:\\documents\\book\\"
@@ -68,9 +69,10 @@ def get_fsids_ex():
 			fsids.clear()
 			print('have dealed:'+str(i))
 						
-def deal_json_file_and_get_book():
+def deal_json_file_and_get_book(path, wrongfile):
 	#path = "E:\\documents\\book\\dlink\\4\\"
-	path = "F:\\download\\baidunetdisk\\1\\"
+	#path = "F:\\download\\baidunetdisk\\1\\"
+	#path = "/home/dayou/dlink/1/"
 	files = os.listdir(path)
 	wrongs=[]
 	#values=[]
@@ -87,15 +89,23 @@ def deal_json_file_and_get_book():
 				
 				data = get_book2(dlink)
 				if(data is not None):
-					with open('book\\'+fileName,'wb') as ff:
-						ff.write(data)
+					if(len(fileName) >100):
+						print('name tooo long: ' + str(len(fileName)))
+						fileName = fileName[:100] + '.epub'
+					try:
+						with open('../book/'+fileName,'wb') as ff:
+							ff.write(data)
+					except OSError as e:
+						print('OSError: '+ file + '|' + fileName)
+						traceback.print_exc()
+						continue
 					print(fileName+' is ok!\n')
 				else:
 					print('fail...'+str(l)+'\n')
 					wrongs.append(l)
 				time.sleep(2)
-		print(file+' have dealed over!\n')
-	with open('wrong.txt', mode='w',encoding='utf-8') as f_wrong:
+		print(file+' have dealed over!==============================================================\n')
+	with open(wrongfile, mode='w',encoding='utf-8') as f_wrong:
 		f_wrong.write(str(wrongs))
 		
 def get_dlink():
@@ -158,7 +168,7 @@ def send_file_name():
 if __name__ == '__main__':
 	#get_dlink()
 	#get_fsids_ex()
-	deal_json_file_and_get_book()
+	deal_json_file_and_get_book(sys.argv[1], sys.argv[2])
 	#get_fsids()
 	#rename_files()
 	#send_file_name()
