@@ -10,6 +10,7 @@ import urllib.parse
 import json
 import time
 import sys
+import datetime,os,sys
 def processGETRequest(appKey, token, text, audioSaveFile, format, sampleRate) :
     host = 'nls-gateway.cn-shanghai.aliyuncs.com'
     url = 'https://' + host + '/stream/v1/tts'
@@ -83,14 +84,14 @@ def processPOSTRequest(appKey, token, text, audioSaveFile, format, sampleRate) :
 
 if __name__ == '__main__':
     appKey = 'O8LBi6qHgMfCIapF'
-    token = 'cacd926b7fdb40e6bb7fe9a54408a59a'
+    token = '21dd230e2475455188ce032b0622b9c5'
     #format = 'wav'
     format = 'mp3'
     sampleRate = 16000
     #path = "F:\\zhanlang\\200818\\中东局势凶险异常！美国开始绞杀伊朗\\"
     path = sys.argv[1]
     slice_len = 300
-    textFile = path + "doc"
+    textFile = path + "\\doc.txt"
     punctuation = ['，', '。', '？', '：', '、', '！', '；']
     print('textFile: ' + textFile)
     with open(textFile, mode='r',encoding='utf-8') as f:
@@ -114,7 +115,7 @@ if __name__ == '__main__':
             
             end = start + index + 1
             slice = content[start:end]
-            print('slice: ' + slice)
+            print('slice' + str(ii)+ ': ' + slice)
             
             textUrlencode = slice
             textUrlencode = urllib.parse.quote_plus(textUrlencode)
@@ -122,33 +123,22 @@ if __name__ == '__main__':
             textUrlencode = textUrlencode.replace("*", "%2A")
             textUrlencode = textUrlencode.replace("%7E", "~")
             #audioSaveFile = path + "voice\\" + str(ii) + "." + format
-            audioSaveFile = path + str(ii) + "." + format
-            for k in range(3):
-                if(0==processGETRequest(appKey, token, textUrlencode, audioSaveFile, format, sampleRate)):
-                    break
-                else:
-                    time.sleep(2)
+            audioPath = path + "\\voice\\"
+            mkdirlambda =lambda x: os.makedirs(x) if not os.path.exists(x)  else True  # 目录是否存在,不存在则创建
+            mkdirlambda(audioPath)
+            audioSaveFile = audioPath + str(ii) + "." + format
+            with open(audioPath+"list.txt", 'a') as fp:
+                for k in range(3):
+                    if(0==processGETRequest(appKey, token, textUrlencode, audioSaveFile, format, sampleRate)):
+                        if(ii != 1):
+                            fp.write('\n')
+                        fp.write("file "+"'"+str(ii) + "." + format+"'")
+                        break
+                    else:
+                        time.sleep(2)
             start = end
             end = start + slice_len
             ii = ii + 1
             time.sleep(1)
             #break
             
-        
-#text = '今天是周一，天气挺好的，我现在北京。'
-## 采用RFC 3986规范进行urlencode编码
-#textUrlencode = text
-## Python 2.x请使用 urllib.quote
-## textUrlencode = urllib.quote(textUrlencode, '')
-## Python 3.x请使用urllib.parse.quote_plus
-#textUrlencode = urllib.parse.quote_plus(textUrlencode)
-#textUrlencode = textUrlencode.replace("+", "%20")
-#textUrlencode = textUrlencode.replace("*", "%2A")
-#textUrlencode = textUrlencode.replace("%7E", "~")
-#print('text: ' + textUrlencode)
-#audioSaveFile = 'test01.wav'
-
-# GET 请求方式
-#processGETRequest(appKey, token, textUrlencode, audioSaveFile, format, sampleRate)
-# POST 请求方式
-# processPOSTRequest(appKey, token, text, audioSaveFile, format, sampleRate)
