@@ -11,6 +11,9 @@ import json
 import time
 import sys
 import datetime,os,sys
+
+from getAliToken import get_ali_token
+
 def processGETRequest(appKey, token, text, audioSaveFile, format, sampleRate) :
     host = 'nls-gateway.cn-shanghai.aliyuncs.com'
     url = 'https://' + host + '/stream/v1/tts'
@@ -84,7 +87,8 @@ def processPOSTRequest(appKey, token, text, audioSaveFile, format, sampleRate) :
 
 if __name__ == '__main__':
     appKey = 'O8LBi6qHgMfCIapF'
-    token = '21dd230e2475455188ce032b0622b9c5'
+    #token = 'b0d60e6ba17c4b30a03cf77a484b64ad'
+    token = get_ali_token()
     #format = 'wav'
     format = 'mp3'
     sampleRate = 16000
@@ -94,6 +98,7 @@ if __name__ == '__main__':
     textFile = path + "\\doc.txt"
     punctuation = ['，', '。', '？', '：', '、', '！', '；']
     print('textFile: ' + textFile)
+    print(token)
     with open(textFile, mode='r',encoding='utf-8') as f:
         content = f.read()
         #print('text: ' + content)
