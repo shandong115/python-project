@@ -1,3 +1,5 @@
+#应用实例
+#(base) G:\workspace\python\python-project\iqiyi>python dealfilename.py "G:\qycache\download\亲子课堂章卫\mp4 - 3" _ .mp4
 import os
 import sys
 
@@ -12,7 +14,7 @@ print("s1 is %s"%s1)
 print("s2 is %s"%s2)
 os.chdir(dir)
 for ss in os.listdir("."):
-	print ss
+	print(ss)
 	try:
 		n1=ss.index(s1)
 		n2=ss.index(s2)
@@ -20,14 +22,14 @@ for ss in os.listdir("."):
 		if(n1>=0 and n2>0):
 			filename=ss[0:n1]
 			filename+=ss[n2:]
-			print filename
+			print(filename)
 			os.rename(ss, filename)
 			changeNum=changeNum+1
 	except ValueError:
-		print "ValueError"
+		print("ValueError")
 	except WindowsError:
-		print "windows error"
+		print("windows error")
 	else:
-		print "rename ok!"
+		print("rename ok!")
 print("fileNum:"+str(fileNum))
 print("changeNum:"+str(changeNum))
